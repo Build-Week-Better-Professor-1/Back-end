@@ -22,7 +22,7 @@ module.exports = {
     client: "postgresql",
     connection: {
       database: process.env.DATABASE_URL,
-      ssl: false,
+      ssl: true,
     },
     pool: {
       min: 2,
