@@ -17,8 +17,6 @@ exports.up = function (knex) {
         .references("users.id");
       tbl.string("name", 128).notNullable();
       tbl.string("email", 128).notNullable();
-
-      tbl.unique(["email"]);
     })
     .createTable("projects", (tbl) => {
       tbl.increments();
