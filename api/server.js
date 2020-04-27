@@ -13,7 +13,7 @@ server.get("/api", (req, res) => {
 });
 
 server.use("/api/auth", auth.router);
-server.use('/api/users', userRouter);
+server.use('/api/users', auth.validateToken, userRouter);
 server.use('/api/students', studentRouter);
 
 module.exports = server;
