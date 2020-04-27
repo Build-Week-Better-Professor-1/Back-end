@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Build-Week-Better-Professor-1/Back-end#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
     "knex": "^0.21.0",
     "sqlite3": "^4.1.1"
