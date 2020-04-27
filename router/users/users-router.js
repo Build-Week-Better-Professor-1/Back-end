@@ -48,13 +48,16 @@ router.put('/:id', (req, res) => {
     Users.findUser(id)
         .then(user => {
             if(!user) {
-
+                res.status(404).json({errorMessage: 'Could not update user, user id not found.'})
             } else {
-
+               Users.editUser(changes, id)
+                .then(update => {
+                    res.status(201).json({message: 'User successfully updated', update})
+                })
             }
         })
         .catch(err => {
-            
+            res.status(500).json({errorMessage: 'Server error, could not update user.', err})
         })
 }) 
 
@@ -62,5 +65,17 @@ router.put('/:id', (req, res) => {
 //DELETE
 //delete user
 router.get('/', (req, res) => {
-    
+    const {id} = req. params;
+
+    Users.deleteUser(id)
+        .then(deleted => {
+            if (!deleted){
+                res.status(404).json({errorMessage: 'Could not delete user, user id not found.'})
+            } else {
+                res.status(201).json({message: 'User deleted.', deleted})
+            }
+        })
+        .catch(err => {
+            res.status(500).json({errorMessage: 'Server error, could not delete user.', err})
+        })
 }) 
