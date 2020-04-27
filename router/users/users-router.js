@@ -63,4 +63,6 @@ router.put('/:id', (req, res) => {
 //delete user
 router.get('/', (req, res) => {
     
-}) 
+})
+
+module.exports = router;

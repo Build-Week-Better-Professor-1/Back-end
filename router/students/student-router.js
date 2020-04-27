@@ -13,7 +13,7 @@ const router = express.Router();
 
 //get all students
 router.get('/', (req, res) => {
-    Students.getStudents()
+    Students.getStudents(req.token.id)
         .then(students => {
             res.status(201).json({message: 'Rendering student list: ', students})
         })
@@ -42,11 +42,12 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
     const studentData = req.body;
 
-    Students.addStudent(studentData)
+    Students.addStudent({...studentData, professor_id: req.token.id})
         .then(student => {
             res.status(201).json({message: 'Student successfully added', student})
         })
         .catch(err => {
+            console.log(err);
             res.status(500).json({message: 'Server error, student not added.', err})
         })
 })
@@ -92,3 +93,5 @@ router.delete('/:id', (req, res) => {
         res.status(500).json({errorMessage: 'Server errror, unable to delete student', err})
     })
 })
+
+module.exports = router;

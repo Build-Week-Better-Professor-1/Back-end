@@ -1,11 +1,11 @@
 //import the database
-const db = require('../data/config');
+const db = require('../../data/config');
 
 /** STUDENT HELPER FUNCTIONS */
 
 //get a list of all the students under the user
-function getStudents(){
-    return db('students').where({professor_id});
+function getStudents(professor_id){
+    return db('students').select().where({professor_id});
 }
 
 //get student by their id
