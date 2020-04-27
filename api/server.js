@@ -1,6 +1,7 @@
 const express = require("express");
 
 const auth = require("./auth.js");
+const router = require('../router/router.js')
 
 const server = express();
 
@@ -11,5 +12,6 @@ server.get("/api", (req, res) => {
 });
 
 server.use("/api/auth", auth.router);
+server.use('/api/students', )
 
 module.exports = server;
