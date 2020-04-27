@@ -34,3 +34,5 @@ module.exports = {
     },
   },
 };
+
+console.log(module.exports.production.connection.database);
