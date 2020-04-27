@@ -17,6 +17,11 @@ function findUser(id) {
     return db('users').where({id}).first();
 }
 
+//find user by their id
+function findUserByEmail(email) {
+    return db('users').select().where({email}).first();
+}
+
 //get a list of all the students under the user
 function getStudents(){
     return db('students').where({professor_id});
@@ -66,6 +71,7 @@ function findMessage(id) {
 
 module.exports = {
     findUser,
+    findUserByEmail,
     findStudent,
     findProject,
     findMessage,
