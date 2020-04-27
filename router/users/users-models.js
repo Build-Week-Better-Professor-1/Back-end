@@ -1,5 +1,5 @@
 //import the database
-const db = require('../data/config');
+const db = require('../../data/config');
 
 //helper functions
 
