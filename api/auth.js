@@ -1,11 +1,17 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const model = require("../router/router-model.js");
 const secrets = require("../secrets.js");
-const auth = require("../auth.js");
 
 const router = express.Router();
+
+module.exports = {
+  router,
+  generateToken,
+  validateToken,
+};
 
 router.post("/register", validateUserObj(true), (req, res) => {
   const creds = {
@@ -20,7 +26,7 @@ router.post("/register", validateUserObj(true), (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
-        token: auth.generateToken(user),
+        token: generateToken(user),
       });
     })
     .catch((err) => {
@@ -42,7 +48,7 @@ router.post("/login", validateUserObj(false), (req, res) => {
           id: user.id,
           name: user.name,
           email: user.email,
-          token: auth.generateToken(user),
+          token: generateToken(user),
         });
       } else {
         res
@@ -75,6 +81,33 @@ function validateUserObj(checkForName) {
   };
 }
 
-module.exports = {
-  router,
-};
+function generateToken(user) {
+  const payload = {
+    id: user.id,
+  };
+
+  const options = {
+    expiresIn: "1d",
+  };
+
+  return jwt.sign(payload, secrets.jwtSecret, options);
+}
+
+// Middleware to check the token
+function validateToken(req, res, next) {
+  if (req.headers.authorization === undefined) {
+    res.status(401).json({ message: "authorization header must be given" });
+    return;
+  }
+  try {
+    if (!jwt.verify(req.headers.authorization, secrets.jwtSecret)) {
+      res.status(401).json({ message: "authorization header is invalid" });
+      return;
+    }
+  } catch (err) {
+    res.status(401).json({ message: "authorization header is invalid" });
+    return;
+  }
+  req.token = jwt.decode(req.headers.authorization);
+  next();
+}
