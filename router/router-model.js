@@ -3,6 +3,7 @@ const db = require('../data/config');
 
 //helper functions
 
+/** USER HELPER FUNCTIONS */
 //add user
 function addUser(user){
     return db('users')
@@ -16,6 +17,8 @@ function addUser(user){
 function findUser(id) {
     return db('users').where({id}).first();
 }
+
+/** STUDENT HELPER FUNCTIONS */
 
 //get a list of all the students under the user
 function getStudents(){
@@ -45,6 +48,25 @@ function addProject(project, student_id){
         })
 }
 
+//edit Student information
+function editStudent(changes, id) {
+    return db('students')
+        .where('id', id)
+        .update(changes)
+        .then(updated => {
+            updated > 0 ? findStudent(id) : null
+        })
+}
+
+//delete student
+function deleteStudent(id) {
+    return db('students')
+        .where('id', id)
+        .del()
+}
+
+
+/** PROJECT HELPER FUNCTIONS */
 //find the project by its id
 function findProject(id) {
     return db('projects').where({id}).first();
@@ -58,6 +80,8 @@ function addMessage(message){
             return findMessage(id);
         });
 }
+
+/** MESSAGE HELPER FUNCTIONS */
 
 //find the message by its id
 function findMessage(id) {
@@ -73,5 +97,7 @@ module.exports = {
     addStudent,
     addProject,
     addMessage,
-    getStudents
+    getStudents,
+    editStudent,
+    deleteStudent
 }
