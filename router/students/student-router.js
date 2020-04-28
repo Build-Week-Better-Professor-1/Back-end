@@ -36,6 +36,22 @@ router.get('/:id', (req, res) => {
         })
 })
 
+//get project by student id
+router.get('/:id/projects', (req, res) => {
+    const {id} = req.params;
+
+    Students.getProjectList(id)
+        .then(projects => {
+            res.status(201).json({message: 'Rendering Student Project List: ', projects})
+        })
+        .catch(err => {
+            res.status(500).json({errorMessage: 'Server error, could not render the specific student project list', err})
+        })
+})
+
+//get project by student
+
+
 //CREATE
 //add student
 router.post('/', (req, res) => {
@@ -50,6 +66,8 @@ router.post('/', (req, res) => {
             res.status(500).json({message: 'Server error, student not added.', err})
         })
 })
+
+//add project to student object
 
 
 //UPDATE
