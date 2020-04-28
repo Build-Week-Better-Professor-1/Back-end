@@ -32,7 +32,7 @@ function addProject(project, student_id){
 }
 
 //add new message to student object
-function addMessaage(messgae, student_id) {
+function addMessage(message, student_id) {
     return db('messages')
         .insert({...message, student_id})
         .then(([id]) => {
@@ -64,5 +64,5 @@ module.exports = {
     getStudents,
     editStudent,
     deleteStudent,
-    addMessaage
+    addMessage
 }
