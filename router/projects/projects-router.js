@@ -61,12 +61,15 @@ router.put('/:id', (req, res) => {
     const {id} = req.params;
     const changes = req.body;
 
-    Projects.editProject(id)
+    Projects.findProject(id)
         .then(project => {
             if(!project) {
                 res.status(404).json({errorMessage: 'Could not find project with set id, please try again'})
             } else {
-                res.status(201).json({message: 'Project information updated'})
+                Projects.editProject(changes, id)
+                .then(updated => {
+                    res.status(201).json({message: 'Project information updated', updated})
+                })
             }
         })
         .catch(err => {

@@ -98,7 +98,7 @@ router.put('/:id', (req, res) => {
 //DELETE
 //delete student
 router.delete('/:id', (req, res) => {
-  const {id} = req.param;
+  const {id} = req.params;
   
   Students.deleteStudent(id)
     .then(deleted => {
