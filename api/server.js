@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 
 const auth = require("./auth.js");
 const studentRouter = require('../router/students/student-router.js');
@@ -8,6 +9,7 @@ const projectsRouter = require('../router/projects/projects-router.js');
 
 const server = express();
 
+server.use(cors());
 server.use(express.json());
 
 server.get("/api", (req, res) => {
