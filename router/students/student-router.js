@@ -23,6 +23,8 @@ router.get('/', (req, res) => {
 
 //get student by id
 router.get('/:id', (req, res) => {
+    const {id} = req.params;
+    
     Students.findStudent(id)
         .then(student => {
             if (!student){

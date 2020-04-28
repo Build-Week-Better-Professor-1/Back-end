@@ -23,6 +23,8 @@ router.get('/', (req, res) => {
 
 //get project by id
 router.get('/:id', (req, res) => {
+    const {id} = req.params;
+    
     Projects.findProject(id)
         .then(project => {
             if (!project){
