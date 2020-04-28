@@ -12,15 +12,14 @@ function getProjects(professor_id) {
 
 //get project by id
 function findProject(id) {
-    return db('projets').where({id}).first();
+    return db('projects').where({id}).first();
 }
 
 //add project
-function addProject(newProject){
+function addNewProject(newProject){
     return db('projects')
-        .insert(newProject)
-        .then(ids => {
-            const [id] = ids
+        .insert(newProject, 'id')
+        .then(([id]) => {
             return findProject(id)
         })
 }
@@ -45,7 +44,7 @@ function deleteProject(id){
 module.exports = {
     getProjects,
     findProject,
-    addProject,
+    addNewProject,
     editProject,
     deleteProject
 }

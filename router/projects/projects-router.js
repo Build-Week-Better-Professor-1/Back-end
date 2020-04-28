@@ -42,7 +42,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
     const projectData = req.body;
 
-    Projects.addProject({...projectData, student_id})
+    Projects.addNewProject(projectData)
         .then(project => {
             res.status(201).json({message: 'Project successfully added', project})
         })
