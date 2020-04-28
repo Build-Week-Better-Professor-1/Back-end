@@ -12,7 +12,7 @@ const router = express.Router();
 //READ
 //get list of projects
 router.get('/', (req, res) => {
-    Projects.getProjects()
+    Projects.getProjects(req.token.id)
         .then(projects => {
             res.status(201).json({ message: 'Rendering project list: ', projects })
         })
@@ -89,3 +89,6 @@ router.delete('/:id', (req, res) => {
             res.status(500).json({errorMessage: 'Server error, could not delete project.'})
         })
 })
+
+
+module.exports = router;

@@ -111,3 +111,5 @@ following way:
   ]
 }
 ```
+
+### GET /

@@ -89,3 +89,5 @@ router.get('/', (req, res) => {
             res.status(500).json({ errorMessage: 'Server error, could not delete message.' })
         })
 })
+
+module.exports = router;

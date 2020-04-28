@@ -52,4 +52,4 @@ module.exports = {
     editMessage,
     deleteMessage,
     addMessage
-}
+};

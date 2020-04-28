@@ -10,7 +10,6 @@ const router = express.Router();
 /** STUDENT ENDPOINTS */
 
 //READ
-
 //get all students
 router.get('/', (req, res) => {
     Students.getStudents(req.token.id)
