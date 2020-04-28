@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
             res.status(201).json({message: 'Rendering student list: ', students})
         })
         .catch(err => {
-            res.status(500).json({errorMessage: 'Server error, could not add student to database. Contact backend.', err})
+            res.status(500).json({errorMessage: 'Server error, could not render student list. Contact backend.', err})
         })
 })
 
