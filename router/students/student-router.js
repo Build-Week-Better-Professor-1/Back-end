@@ -92,7 +92,7 @@ router.post("/", validateStudentObj, (req, res) => {
 
 //UPDATE
 //edit student
-router.put("/:id", (req, res) => {
+router.put("/:id", validateStudentObj, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
@@ -106,7 +106,11 @@ router.put("/:id", (req, res) => {
         Students.editStudent(changes, id).then((updated) => {
           res
             .status(200)
-            .json({ message: "Student information updated.", updated });
+            .json({ message: "Student information updated.", updated: {
+                id: updated.id,
+                name: updated.name,
+                email: updated.email,
+                }});
         });
       }
     })
@@ -154,6 +158,13 @@ function validateStudentObj(req, res, next) {
   if (missingFields.length > 0) {
     res.status(400).json({
       errorMessage: `The following required fields are missing: ${missingFields}`,
+    });
+    return;
+  }
+
+  if (req.body.professor_id) {
+    res.status(400).json({
+      errorMessage: `professor_id must not be defined`,
     });
     return;
   }
