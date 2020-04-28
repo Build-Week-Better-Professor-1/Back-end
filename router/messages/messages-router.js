@@ -14,7 +14,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
     Messages.getMessages(req.token.id)
         .then(appMessages => {
-            res.status(201).json({ errorMessage: 'Rendering message list', appMessages })
+            res.status(201).json({ message: 'Rendering message list', appMessages })
         })
         .catch(err => {
             console.log('error', err)
@@ -79,7 +79,7 @@ router.put('/:id', (req, res) => {
 
 
 //DELETE
-router.get('/', (req, res) => {
+router.delete('/:id', (req, res) => {
     const { id } = req.params;
 
     Messages.deleteMessage(id)
