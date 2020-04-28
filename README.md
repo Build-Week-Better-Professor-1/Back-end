@@ -1,6 +1,6 @@
 # Back-end
 
-The API's url is <https://betterprofessorapp.heroku.com>.
+The API's url is <https://betterprofessorapp.herokuapp.com/>.
 
 ### POST `/api/auth/register`
 
