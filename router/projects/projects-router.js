@@ -10,17 +10,6 @@ const router = express.Router();
 /** PROJECT ENDPOINTS */
 
 //READ
-//get list of projects
-router.get('/', (req, res) => {
-    Projects.getProjects(req.token.id)
-        .then(projects => {
-            res.status(201).json({ message: 'Rendering project list: ', projects })
-        })
-        .catch(err => {
-            res.status(500).json({ errorMessage: 'Server error, could not render project list. Contact backend.', err })
-        })
-})
-
 //get project by id
 router.get('/:id', (req, res) => {
     const {id} = req.params;
@@ -30,27 +19,11 @@ router.get('/:id', (req, res) => {
             if (!project){
                 res.status(404).json({errorMessage: 'Could not find project with set id.'})
             } else {
-                res.status(201).json({message: 'Pulling up project information: ', project})
+                res.status(200).json({message: 'Pulling up project information: ', project})
             }
         })
         .catch(err => {
             res.status(500).json({errorMessage: "Server error, could not find project id. Contact backend.", err})
-        })
-})
-
-
-//CREATE
-//add project to database and assign to student
-router.post('/', (req, res) => {
-    const projectData = req.body;
-
-    Projects.addNewProject(projectData)
-        .then(project => {
-            res.status(201).json({message: 'Project successfully added', project})
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({message: 'Server error, project not added.', err})
         })
 })
 

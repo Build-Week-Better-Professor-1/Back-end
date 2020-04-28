@@ -76,7 +76,7 @@ function validateUserObj(checkForName) {
     if (checkForName && req.body.name === undefined) missingFields.push("name");
 
     if (missingFields.length > 0) {
-      res.status(404).json({
+      res.status(400).json({
         errorMessage: `The following required fields are missing: ${missingFields}`,
       });
     }
