@@ -18,13 +18,24 @@ describe("students router", () => {
     email: "bob@gmail.com",
   };
 
+  const example_project = {
+    id: 1,
+    student_id: 1,
+    name: "example project",
+    description: "example project description",
+    due_date: "2020-04-28",
+    completed: 0,
+  };
+
   let token;
 
   beforeEach(async () => {
+    await db("projects").truncate();
     await db("students").truncate();
     await db("users").truncate();
     await db("users").insert(example_professor);
     await db("students").insert(example_student);
+    await db("projects").insert(example_project);
     token = auth.generateToken(example_professor);
   });
 
@@ -60,6 +71,22 @@ describe("students router", () => {
     });
 
     it.todo("should return 404 on unknown students");
+  });
+
+  describe("GET /api/students/:id/projects", () => {
+    it("should return 200", async () => {
+      const res = await request(server)
+        .get(`/api/students/${example_student.id}/projects`)
+        .set("Authorization", token);
+      expect(res.status).toBe(200);
+    });
+
+    it("should return list with example project", async () => {
+      const res = await request(server)
+        .get(`/api/students/${example_student.id}/projects`)
+        .set("Authorization", token);
+      expect(res.body.projects).toEqual([example_project]);
+    });
   });
 
   describe("POST /api/students", () => {
