@@ -43,13 +43,17 @@ router.post("/login", validateUserObj(false), (req, res) => {
   model
     .findUserByEmail(req.body.email)
     .then((user) => {
-      if (user && bcrypt.compareSync(req.body.password, user.password)) {
-        res.status(200).json({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          token: generateToken(user),
-        });
+      if (user) {
+        if (bcrypt.compareSync(req.body.password, user.password)) {
+          res.status(200).json({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            token: generateToken(user),
+          });
+        } else {
+          res.status(401).json({ errorMessage: "Password is incorrect" });
+        }
       } else {
         res
           .status(404)
