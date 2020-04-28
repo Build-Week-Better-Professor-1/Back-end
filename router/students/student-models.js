@@ -46,7 +46,7 @@ function editStudent(changes, id) {
         .where('id', id)
         .update(changes)
         .then(updated => {
-            updated > 0 ? findStudent(id) : null
+            return updated > 0 ? findStudent(id) : null
         })
 }
 

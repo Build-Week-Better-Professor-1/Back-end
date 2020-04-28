@@ -30,13 +30,15 @@ describe("students router", () => {
   let token;
 
   beforeEach(async () => {
-    await db("projects").truncate();
-    await db("students").truncate();
-    await db("users").truncate();
-    await db("users").insert(example_professor);
-    await db("students").insert(example_student);
-    await db("projects").insert(example_project);
     token = auth.generateToken(example_professor);
+    await db("projects")
+      .truncate()
+      .then(() => db("students").truncate())
+      .then(() => db("users").truncate());
+    return db("users")
+      .insert(example_professor)
+      .then(() => db("students").insert(example_student))
+      .then(() => db("projects").insert(example_project));
   });
 
   describe("GET /api/students", () => {
@@ -129,11 +131,54 @@ describe("students router", () => {
     });
   });
 
-  describe("PUT /api/students", () => {
-    it.todo("should return 200");
-    it.todo("should return updated student");
-    it.todo("should reject invalid student objects");
-    it.todo("should return 404 on unknown students");
+  describe("PUT /api/students/:id", () => {
+    const updated_student = {
+      name: "mario",
+      email: "mario@gmail.com",
+    };
+
+    it("should return 200", async () => {
+      const res = await request(server)
+        .put(`/api/students/1`)
+        .send(updated_student)
+        .set("Authorization", token);
+      expect(res.status).toBe(200);
+    });
+
+    it("should return updated student", async () => {
+      const res = await request(server)
+        .put(`/api/students/1`)
+        .send(updated_student)
+        .set("Authorization", token);
+      expect(res.body.updated).toEqual({
+        ...updated_student,
+        id: 1,
+      });
+    });
+
+    it("should reject changes to professor_id", async () => {
+      const res = await request(server)
+        .put(`/api/students/1`)
+        .send({ ...updated_student, professor_id: 1 })
+        .set("Authorization", token);
+      expect(res.status).toBe(400);
+    });
+
+    it("should reject invalid student objects", async () => {
+      const res = await request(server)
+        .put(`/api/students/1`)
+        .send({ random_key: "hey-o" })
+        .set("Authorization", token);
+      expect(res.status).toBe(400);
+    });
+
+    it("should return 404 on unknown students", async () => {
+      const res = await request(server)
+        .put(`/api/students/1337`)
+        .send(updated_student)
+        .set("Authorization", token);
+      expect(res.status).toBe(404);
+    });
   });
 
   describe("DELETE /api/students", () => {
