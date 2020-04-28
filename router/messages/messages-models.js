@@ -6,8 +6,8 @@ const db = require('../../data/config');
 /** MESSAGES HELPER FUNCTIONS */
 
 //get list of messages
-function getMessages() {
-    return db('messages');
+function getMessages(professor_id) {
+    return db('messages').select().where({professor_id});
 }
 
 //get message by id

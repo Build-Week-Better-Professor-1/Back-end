@@ -12,7 +12,7 @@ const router = express.Router();
 //READ
 //get full list of messages
 router.get('/', (req, res) => {
-    Messages.getMessages()
+    Messages.getMessages(req.token.id)
         .then(appMessages => {
             res.status(201).json({ errorMessage: 'Rendering message list', appMessages })
         })
