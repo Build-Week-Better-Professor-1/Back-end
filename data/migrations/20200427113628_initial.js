@@ -14,7 +14,9 @@ exports.up = function (knex) {
         .integer("professor_id")
         .unsigned()
         .notNullable()
-        .references("users.id");
+        .references("users.id")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE");
       tbl.string("name", 128).notNullable();
       tbl.string("email", 128).notNullable();
     })
@@ -24,7 +26,9 @@ exports.up = function (knex) {
         .integer("student_id")
         .unsigned()
         .notNullable()
-        .references("students.id");
+        .references("students.id")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE");
       tbl.string("name", 128).notNullable();
       tbl.string("description", 8192).notNullable();
       tbl.datetime("due_date");
