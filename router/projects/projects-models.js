@@ -6,8 +6,8 @@ const db = require('../../data/config');
 /** PROJECT HELPER FUNCTIONS */
 
 //get list of projects
-function getProjects(professor_id) {
-    return db('projects').select().where({professor_id});
+function getProjects(student_id) {
+    return db('projects').select().where({student_id});
 }
 
 //get project by id
