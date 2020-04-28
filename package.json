@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon index.js",
+    "test": "cross-env DB_ENV=testing jest --watch",
     "start": "node index.js"
   },
   "repository": {
@@ -26,6 +27,9 @@
     "sqlite3": "^4.1.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.3"
+    "cross-env": "^7.0.2",
+    "jest": "^25.5.0",
+    "nodemon": "^2.0.3",
+    "supertest": "^4.0.2"
   }
 }
