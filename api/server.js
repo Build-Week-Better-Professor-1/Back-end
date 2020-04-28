@@ -17,7 +17,7 @@ server.get("/api", (req, res) => {
 server.use("/api/auth", auth.router);
 server.use('/api/users', auth.validateToken, userRouter);
 server.use('/api/students', auth.validateToken, studentRouter);
-server.use('/api/messages', messagesRouter);
-server.use('/api/projects', projectsRouter);
+server.use('/api/messages', auth.validateToken, messagesRouter);
+server.use('/api/projects', auth.validateToken, projectsRouter);
 
 module.exports = server;
