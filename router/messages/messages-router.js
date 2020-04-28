@@ -17,11 +17,15 @@ router.get('/', (req, res) => {
             res.status(201).json({ errorMessage: 'Rendering message list', appMessages })
         })
         .catch(err => {
+            console.log('error', err)
             res.status(500).json({ errorMessage: 'Server error, could not render message list', err })
         })
 })
 
+//get message by id
 router.get('/:id', (req, res) => {
+    const {id} = req.params;
+    
     Messages.findMessage(id)
         .then(appMessage => {
             if (!appMessage) {
@@ -40,11 +44,12 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
     const messageData = req.body;
 
-    Messages.addMessage({ ...messageData, user_id: req.token.id })
+    Messages.addMessage({ ...messageData, professor_id: req.token.id })
         .then(newMessage => {
             res.status(201).json({ message: 'Message successfully added.', newMessage })
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({ errorMessage: 'Server error, could not add message' })
         })
 })
