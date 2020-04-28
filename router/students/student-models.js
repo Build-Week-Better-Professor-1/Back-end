@@ -57,6 +57,11 @@ function deleteStudent(id) {
         .del()
 }
 
+//get list of projects related to specific student
+function getProjectList(student_id){
+    return db('projects').select().where({student_id})
+}
+
 module.exports = {
     findStudent,
     addStudent,
@@ -64,5 +69,6 @@ module.exports = {
     getStudents,
     editStudent,
     deleteStudent,
-    addMessage
+    addMessage,
+    getProjectList
 }

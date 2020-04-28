@@ -23,6 +23,8 @@ router.get('/', (req, res) => {
 
 //get project by id
 router.get('/:id', (req, res) => {
+    const {id} = req.params;
+    
     Projects.findProject(id)
         .then(project => {
             if (!project){
@@ -42,7 +44,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
     const projectData = req.body;
 
-    Projects.addProject({...projectData, student_id})
+    Projects.addNewProject(projectData)
         .then(project => {
             res.status(201).json({message: 'Project successfully added', project})
         })

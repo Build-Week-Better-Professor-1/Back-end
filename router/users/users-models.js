@@ -50,6 +50,10 @@ function deleteUser(id) {
         .del();
 }
 
+function findUserByEmail(email) {
+    return db('users').select().where({email}).first();
+}
+
 
 module.exports = {
     getUsers,
@@ -57,5 +61,6 @@ module.exports = {
     addUser,
     findUser,
     editUser,
-    deleteUser
+    deleteUser,
+    findUserByEmail
 }
