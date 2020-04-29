@@ -35,7 +35,7 @@ describe("projects router", () => {
       .truncate()
       .then(() => db("students").truncate())
       .then(() => db("users").truncate())
-      .then(() => db("users") .insert(example_professor))
+      .then(() => db("users").insert(example_professor))
       .then(() => db("students").insert(example_student))
       .then(() => db("projects").insert(example_project));
   });
@@ -49,14 +49,46 @@ describe("projects router", () => {
       expect(res.body.project).toEqual(example_project);
     });
 
-    it.todo("should return 404 on unknown projects");
+    it("should return 404 on unknown projects", async () => {
+      const res = await request(server)
+        .get(`/api/projects/143`)
+        .set("Authorization", token);
+      expect(res.status).toBe(404);
+    });
   });
 
   describe("PUT /api/projects/:id", () => {
-    it.todo("should return 200");
-    it.todo("should return updated student");
-    it.todo("should reject invalid student objects");
-    it.todo("should return 404 on unknown students");
+    const update = {
+      name: "example project updated",
+      description: "example project description updated",
+      due_date: "2020-04-29",
+      completed: 1,
+    };
+
+    it("should return updated project", async () => {
+      const res = await request(server)
+        .put(`/api/projects/${example_project.id}`)
+        .send(update)
+        .set("Authorization", token);
+      expect(res.status).toBe(200);
+      expect(res.body.project).toEqual({ ...example_project, ...update });
+    });
+
+    it("should reject invalid student objects", async () => {
+      const res = await request(server)
+        .put(`/api/projects/${example_project.id}`)
+        .send({ hello: "world" })
+        .set("Authorization", token);
+      expect(res.status).toBe(400);
+    });
+
+    it("should return 404 on unknown students", async () => {
+      const res = await request(server)
+        .put(`/api/projects/12356`)
+        .send(update)
+        .set("Authorization", token);
+      expect(res.status).toBe(404);
+    });
   });
 
   describe("DELETE /api/projects/:id", () => {

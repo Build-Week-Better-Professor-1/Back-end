@@ -34,18 +34,27 @@ router.put('/:id', (req, res) => {
     const {id} = req.params;
     const changes = req.body;
 
-    Projects.findProject(id)
+    const missingFields = [];
+    if (changes.name === undefined) missingFields.push("name");
+    if (changes.description === undefined) missingFields.push("description");
+    if (changes.due_date === undefined) missingFields.push("due_date");
+    if (changes.completed === undefined) missingFields.push("completed");
+
+    if (missingFields.length > 0) {
+        res.status(400).json({errorMessage: `Missing required fields: ${missingFields}`});
+        return;
+    }
+
+    Projects.editProject(changes, id)
         .then(project => {
             if(!project) {
                 res.status(404).json({errorMessage: 'Could not find project with set id, please try again'})
             } else {
-                Projects.editProject(changes, id)
-                .then(updated => {
-                    res.status(201).json({message: 'Project information updated', updated})
-                })
+                res.status(200).json({message: 'Project information updated', project})
             }
         })
         .catch(err => {
+            console.log(err);
             res.status(500).json({errorMessage: 'Server error, unable to edit project', err})
         })
 })
