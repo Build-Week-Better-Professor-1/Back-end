@@ -111,4 +111,69 @@ describe('messages router function', () => {
                 expect(res.body.newMessage.title).toBe(example_message.title);
         })
     })
+
+    describe('PUT @ /api/messages/:id', () => {
+
+        const updated_message = {
+            title: "new test title",
+            body: "new test body",
+            time_to_send: "2020-15-10",
+            sent: "true"
+        }
+
+        it('should return 201', async () => {
+            const res = await request(server)
+                .put('/api/messages/1')
+                .send(updated_message)
+                .set('Authorization', token);
+                expect(res.status).toBe(201);
+        })
+        it('should return updated message', async () => {
+            const res = await request(server)
+                .put('/api/messages/1')
+                .send(updated_message)
+                .set('Authorization', token);
+                expect(res.body.updatedMessage.sent)
+                .toEqual("true");
+        })
+        it('should return 404 if message id does not exist', async () => {
+            const res = await request(server)
+                .put('/api/messages/2341')
+                .send(updated_message)
+                .set('Authorization', token);
+                expect(res.status).toBe(404)
+        })
+        it("should return 500 if user is not logged in", async () => {
+            const res = await request(server)
+            .put('/api/messages/1')
+            .send(updated_message);
+            expect(res.status).toBe(401)
+        })
+    })
+
+    describe('DELETE @ /api/messages/:id', () => {
+
+        it('should return 201 when message deleted', async () => {
+            const res = await request(server)
+                .del('/api/messages/1')
+                .set('Authorization', token);
+                expect(res.status).toBe(201)
+        })
+
+        it('should return list without the message object', async () => {
+            const res = await request(server)
+                .del('/api/messages/1')
+                .set('Authorization', token);
+                const messages = await db('messages')
+                expect(messages.length).toBe(0)
+        })
+
+        it('should return a JSON success message', async () => {
+            const res = await request(server)
+                .del('/api/messages/1')
+                .set('Authorization', token);
+                expect(res.type).toMatch(/json/i)
+        })
+
+    })
 })

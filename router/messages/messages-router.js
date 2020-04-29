@@ -67,8 +67,8 @@ router.put('/:id', (req, res) => {
                 res.status(404).json({ errorMessage: 'Could not update message with set id, please try again.' })
             } else {
                 Messages.editMessage(changes, id)
-                    .then(updated => {
-                        res.status(201).json({ message: 'Message successfully updated', updated })
+                    .then(updatedMessage => {
+                        res.status(201).json({ message: 'Message successfully updated', updatedMessage })
                     })
             }
         })
@@ -79,7 +79,7 @@ router.put('/:id', (req, res) => {
 
 
 //DELETE
-router.get('/', (req, res) => {
+router.delete('/:id', (req, res) => {
     const { id } = req.params;
 
     Messages.deleteMessage(id)
