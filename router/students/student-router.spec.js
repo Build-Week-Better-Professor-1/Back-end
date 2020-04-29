@@ -76,7 +76,12 @@ describe("students router", () => {
       expect(res.body.student).toEqual(example_student);
     });
 
-    it.todo("should return 404 on unknown students");
+    it("should return 404 on unknown students", async () => {
+      const res = await request(server)
+        .get(`/api/students/1337`)
+        .set("Authorization", token);
+      expect(res.status).toBe(404);
+    });
   });
 
   describe("GET /api/students/:id/projects", () => {
@@ -186,8 +191,19 @@ describe("students router", () => {
   });
 
   describe("DELETE /api/students", () => {
-    it.todo("should return 200");
-    it.todo("should return deleted student");
-    it.todo("should return 404 on unknown students");
+    it("should return deleted student", async () => {
+      const res = await request(server)
+        .delete(`/api/students/${example_student.id}`)
+        .set("Authorization", token);
+      expect(res.status).toBe(200);
+      expect(res.body.student).toEqual(example_student);
+    });
+
+    it("should return 404 on unknown students", async () => {
+      const res = await request(server)
+        .delete(`/api/students/1337`)
+        .set("Authorization", token);
+      expect(res.status).toBe(404);
+    });
   });
 });

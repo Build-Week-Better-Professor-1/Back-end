@@ -113,24 +113,36 @@ router.put("/:id", validateStudentId, validateStudentObj, (req, res) => {
 //DELETE
 //delete student
 router.delete("/:id", (req, res) => {
-  const { id } = req.param;
+  const { id } = req.params;
 
-  Students.deleteStudent(id)
-    .then((deleted) => {
-      if (!deleted) {
-        res.status(404).json({
-          errorMessage: "Unable to delete student; set id not found.",
+  Students.findStudent(id)
+    .then((student) => {
+      Students.deleteStudent(id)
+        .then((deleted) => {
+          if (!deleted) {
+            res.status(404).json({
+              errorMessage: "Unable to delete student; set id not found.",
+            });
+          } else {
+            student.professor_id = undefined;
+            res
+              .status(200)
+              .json({ message: "Student successfully deleted.", student });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500).json({
+            errorMessage: "Server errror, unable to delete student",
+            err,
+          });
         });
-      } else {
-        res
-          .status(200)
-          .json({ message: "Student successfully deleted.", deleted });
-      }
     })
     .catch((err) => {
+      console.log(err);
       res
         .status(500)
-        .json({ errorMessage: "Server errror, unable to delete student", err });
+        .json({ errorMessage: "Server error, could not look up student", err });
     });
 });
 
