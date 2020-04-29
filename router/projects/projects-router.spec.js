@@ -29,30 +29,23 @@ describe("projects router", () => {
 
   let token;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     token = auth.generateToken(example_professor);
-    await db("projects")
+    return db("projects")
       .truncate()
       .then(() => db("students").truncate())
-      .then(() => db("users").truncate());
-    return db("users")
-      .insert(example_professor)
+      .then(() => db("users").truncate())
+      .then(() => db("users") .insert(example_professor))
       .then(() => db("students").insert(example_student))
       .then(() => db("projects").insert(example_project));
   });
 
   describe("GET /api/projects/:id", () => {
-    it("should return 200", async () => {
-      const res = await request(server)
-        .get(`/api/projects/${example_project.id}`)
-        .set("Authorization", token);
-      expect(res.status).toBe(200);
-    });
-
     it("should return example project", async () => {
       const res = await request(server)
         .get(`/api/projects/${example_project.id}`)
         .set("Authorization", token);
+      expect(res.status).toBe(200);
       expect(res.body.project).toEqual(example_project);
     });
 
