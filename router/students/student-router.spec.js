@@ -13,7 +13,6 @@ describe("students router", () => {
 
   const example_student = {
     id: 1,
-    professor_id: 1,
     name: "Bob",
     email: "bob@gmail.com",
   };
@@ -37,7 +36,12 @@ describe("students router", () => {
       .then(() => db("users").truncate());
     return db("users")
       .insert(example_professor)
-      .then(() => db("students").insert(example_student))
+      .then(() =>
+        db("students").insert({
+          ...example_student,
+          professor_id: example_professor.id,
+        })
+      )
       .then(() => db("projects").insert(example_project));
   });
 
