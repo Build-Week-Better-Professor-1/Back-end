@@ -1,6 +1,8 @@
-exports.seed = async function (knex) {
-  await knex("messages").truncate();
-  await knex("projects").truncate();
-  await knex("students").truncate();
-  await knex("users").truncate();
+const knexCleaner = require("knex-cleaner");
+
+exports.seed = function (knex) {
+  return knexCleaner.clean(knex, {
+    mode: "truncate",
+    ignoreTables: ["knex_migrations", "knex_migrations_lock"],
+  });
 };
