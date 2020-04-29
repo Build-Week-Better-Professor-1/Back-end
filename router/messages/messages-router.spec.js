@@ -35,14 +35,14 @@ describe('messages router function', () => {
     beforeEach(async () => {
         token = auth.generateToken(example_professor);
         await db("projects")
-          .truncate()
-          .then(() => db("students").truncate())
-          .then(() => db("users").truncate())
-          .then(() => db('messages').truncate());
+            .truncate()
+            .then(() => db("students").truncate())
+            .then(() => db("users").truncate())
+            .then(() => db('messages').truncate());
         return db("users")
-          .insert(example_professor)
-          .then(() => db("students").insert(example_student))
-          .then(() => db('messages').insert(example_message));
+            .insert(example_professor)
+            .then(() => db("students").insert(example_student))
+            .then(() => db('messages').insert(example_message));
     });
 
     describe('GET @ /api/messages', () => {
@@ -50,19 +50,19 @@ describe('messages router function', () => {
             const res = await request(server)
                 .get('/api/messages')
                 .set('Authorization', token);
-                expect(res.status).toBe(201);
+            expect(res.status).toBe(201);
         });
         it('should return a JSON message', async () => {
             const res = await request(server)
                 .get('/api/messages')
                 .set('Authorization', token);
-                expect(res.type).toMatch(/json/i);
+            expect(res.type).toMatch(/json/i);
         });
         it('should generate a list', async () => {
             const res = await request(server)
                 .get('/api/messages')
                 .set('Authorization', token);
-                expect(res.body.appMessages).toEqual([example_message]);
+            expect(res.body.appMessages).toEqual([example_message]);
         })
     })
     describe('GET @ /api/messages/:id', () => {
@@ -70,19 +70,19 @@ describe('messages router function', () => {
             const res = await request(server)
                 .get(`/api/messages/${example_message.id}`)
                 .set('Authorization', token);
-                expect(res.status).toBe(201);
+            expect(res.status).toBe(201);
         })
         it('should return JSON message', async () => {
             const res = await request(server)
                 .get(`/api/messages/${example_message.id}`)
                 .set('Authorization', token);
-                expect(res.type).toMatch(/json/i);
+            expect(res.type).toMatch(/json/i);
         })
         it('should return a message', async () => {
             const res = await request(server)
                 .get(`/api/messages/${example_message.id}`)
                 .set('Authorization', token);
-                expect(res.body.appMessage).toEqual(example_message);
+            expect(res.body.appMessage).toEqual(example_message);
         })
     })
 
@@ -100,15 +100,15 @@ describe('messages router function', () => {
                 .post('/api/messages/')
                 .send(new_message)
                 .set('Authorization', token);
-                expect(res.status).toBe(201);
+            expect(res.status).toBe(201);
         })
-      
+
         it('should return new message', async () => {
             const res = await request(server)
                 .post('/api/messages')
                 .send(new_message)
                 .set('Authorization', token);
-                expect(res.body.newMessage.title).toBe(example_message.title);
+            expect(res.body.newMessage.title).toBe(example_message.title);
         })
     })
 
@@ -126,14 +126,14 @@ describe('messages router function', () => {
                 .put('/api/messages/1')
                 .send(updated_message)
                 .set('Authorization', token);
-                expect(res.status).toBe(201);
+            expect(res.status).toBe(201);
         })
         it('should return updated message', async () => {
             const res = await request(server)
                 .put('/api/messages/1')
                 .send(updated_message)
                 .set('Authorization', token);
-                expect(res.body.updatedMessage.sent)
+            expect(res.body.updatedMessage.sent)
                 .toEqual("true");
         })
         it('should return 404 if message id does not exist', async () => {
@@ -141,12 +141,12 @@ describe('messages router function', () => {
                 .put('/api/messages/2341')
                 .send(updated_message)
                 .set('Authorization', token);
-                expect(res.status).toBe(404)
+            expect(res.status).toBe(404)
         })
         it("should return 500 if user is not logged in", async () => {
             const res = await request(server)
-            .put('/api/messages/1')
-            .send(updated_message);
+                .put('/api/messages/1')
+                .send(updated_message);
             expect(res.status).toBe(401)
         })
     })
@@ -157,22 +157,22 @@ describe('messages router function', () => {
             const res = await request(server)
                 .del('/api/messages/1')
                 .set('Authorization', token);
-                expect(res.status).toBe(201)
+            expect(res.status).toBe(201)
         })
 
         it('should return list without the message object', async () => {
             const res = await request(server)
                 .del('/api/messages/1')
                 .set('Authorization', token);
-                const messages = await db('messages')
-                expect(messages.length).toBe(0)
+            const messages = await db('messages')
+            expect(messages.length).toBe(0)
         })
 
         it('should return a JSON success message', async () => {
             const res = await request(server)
                 .del('/api/messages/1')
                 .set('Authorization', token);
-                expect(res.type).toMatch(/json/i)
+            expect(res.type).toMatch(/json/i)
         })
 
     })
