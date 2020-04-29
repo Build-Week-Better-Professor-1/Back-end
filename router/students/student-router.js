@@ -65,7 +65,43 @@ router.get("/:id/projects", (req, res) => {
     });
 });
 
-//get project by student
+router.post("/:id/projects", (req, res) => {
+  const { id } = req.params;
+  const project = req.body;
+
+  if (project.id !== undefined) {
+    res.status(400).json({ errorMessage: "id field must not be defined" });
+    return;
+  }
+
+  const missingFields = [];
+  if (project.name === undefined) missingFields.push("name");
+  if (project.description === undefined) missingFields.push("description");
+  if (project.due_date === undefined) missingFields.push("due_date");
+  if (project.completed === undefined) missingFields.push("completed");
+
+  if (missingFields.length > 0) {
+    res
+      .status(400)
+      .json({ errorMessage: `Missing required fields: ${missingFields}` });
+    return;
+  }
+
+  Students.addProject(project, id)
+    .then((project) => {
+      res
+        .status(201)
+        .json({ message: "Rendering New Student Project: ", project });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        errorMessage:
+          "Server error, could not render the specific student project list",
+        err,
+      });
+    });
+});
 
 //CREATE
 //add student

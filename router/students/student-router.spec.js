@@ -100,6 +100,29 @@ describe("students router", () => {
     });
   });
 
+  describe("POST /api/students/:id/projects", () => {
+    const new_project = {
+      student_id: 1,
+      name: "new project",
+      description: "new project description",
+      due_date: "2020-04-20",
+      completed: 1,
+    };
+
+    it("should return new project", async () => {
+      const res = await request(server)
+        .post(`/api/students/${example_student.id}/projects`)
+        .send(new_project)
+        .set("Authorization", token);
+      expect(res.status).toBe(201);
+      expect(res.body.project.student_id).toBe(new_project.student_id);
+      expect(res.body.project.name).toBe(new_project.name);
+      expect(res.body.project.description).toBe(new_project.description);
+      expect(res.body.project.due_date).toBe(new_project.due_date);
+      expect(res.body.project.completed).toBe(new_project.completed);
+    });
+  });
+
   describe("POST /api/students", () => {
     const new_student = {
       name: "Evan",
