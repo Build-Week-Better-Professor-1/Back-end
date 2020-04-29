@@ -14,7 +14,6 @@ describe('authentication process', () => {
         password: 'testpass'
     }
 
-    let token;
 
     beforeEach(async () => {
         await db('users').truncate()
@@ -24,16 +23,16 @@ describe('authentication process', () => {
         it('add new user with the credentials to the database', async () => {
             const res = await request(server)
                 .post('/api/auth/register')
-            await Users.addUser(new_user)
+                .send(new_user)
             const usersDB = await db('users');
+            console.log(await db('users'))
             expect(usersDB).toHaveLength(1);
         })
         it('generate a token for the user', async () => {
             const res = await request(server)
                 .post('/api/auth/register')
-            await Users.addUser(new_user)
-            await auth.generateToken(new_user)
-            expect(res.body.token).toBe(new_user.token)
+                .send(new_user)
+            expect(res.body.token).toBeTruthy()
         })
     })
 
