@@ -24,11 +24,6 @@ function addUser(user){
         })
 }
 
-//find user by their id
-function findUser(id) {
-    return db('users').where({id}).first();
-}
-
 //update user information
 function editUser(changes, id) {
     return db('users')
