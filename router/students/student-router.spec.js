@@ -121,6 +121,28 @@ describe("students router", () => {
       expect(res.body.project.due_date).toBe(new_project.due_date);
       expect(res.body.project.completed).toBe(new_project.completed);
     });
+
+    it("should add the project to the database", async () => {
+      const pre_existing = await db("projects")
+        .select()
+        .where({ name: new_project.name });
+      expect(pre_existing).toHaveLength(0);
+
+      const res = await request(server)
+        .post(`/api/students/${example_student.id}/projects`)
+        .send(new_project)
+        .set("Authorization", token);
+
+      const row = await db("projects")
+        .select()
+        .where({ name: new_project.name })
+        .first();
+      expect(row.student_id).toBe(new_project.student_id);
+      expect(row.name).toBe(new_project.name);
+      expect(row.description).toBe(new_project.description);
+      expect(row.due_date).toBe(new_project.due_date);
+      expect(row.completed).toBe(new_project.completed);
+    });
   });
 
   describe("POST /api/students", () => {
@@ -160,6 +182,25 @@ describe("students router", () => {
         .get(`/api/students/1337`)
         .set("Authorization", token);
       expect(res.status).toBe(404);
+    });
+
+    it("should add the student to the database", async () => {
+      const pre_existing = await db("projects")
+        .select()
+        .where({ name: new_student.name });
+      expect(pre_existing).toHaveLength(0);
+
+      const res = await request(server)
+        .post(`/api/students`)
+        .send(new_student)
+        .set("Authorization", token);
+
+      const row = await db("students")
+        .select()
+        .where({ name: new_student.name })
+        .first();
+      expect(row.name).toBe(new_student.name);
+      expect(row.email).toBe(new_student.email);
     });
   });
 
