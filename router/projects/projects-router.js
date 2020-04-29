@@ -64,17 +64,22 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     const {id} = req.params
 
-    Projects.deleteProject(id)
-        .then(deleted => {
-            if(!deleted) {
-                res.status(404).json({errorMessage: 'Could not delete the project with the set id, please try again.'})
-            } else {
-                res.status(201).json({message: "Project deleted", deleted})
-            }
-        })
-        .catch(err => {
-            res.status(500).json({errorMessage: 'Server error, could not delete project.'})
-        })
+    Projects.findProject(id).then(project => {
+        Projects.deleteProject(id)
+            .then(deleted => {
+                if(!deleted) {
+                    res.status(404).json({errorMessage: 'Could not delete the project with the set id, please try again.'})
+                } else {
+                    res.status(200).json({message: "Project deleted", project})
+                }
+            })
+            .catch(err => {
+                res.status(500).json({errorMessage: 'Server error, could not delete project.'})
+            })
+    })
+    .catch(err => {
+        res.status(500).json({errorMessage: 'Server error, could not get projects.'})
+    });
 })
 
 

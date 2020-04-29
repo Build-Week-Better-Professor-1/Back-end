@@ -92,8 +92,19 @@ describe("projects router", () => {
   });
 
   describe("DELETE /api/projects/:id", () => {
-    it.todo("should return 200");
-    it.todo("should return deleted student");
-    it.todo("should return 404 on unknown students");
+    it("should return deleted student", async () => {
+      const res = await request(server)
+        .delete(`/api/projects/${example_project.id}`)
+        .set("Authorization", token);
+      expect(res.status).toBe(200);
+      expect(res.body.project).toEqual(example_project);
+    });
+
+    it("should return 404 on unknown students", async () => {
+      const res = await request(server)
+        .delete(`/api/projects/12356`)
+        .set("Authorization", token);
+      expect(res.status).toBe(404);
+    });
   });
 });
