@@ -1,6 +1,8 @@
 //import the database
 const db = require('../../data/config');
 
+const findProject = require("../projects/projects-models.js").findProject;
+
 /** STUDENT HELPER FUNCTIONS */
 
 //get a list of all the students under the user

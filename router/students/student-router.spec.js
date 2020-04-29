@@ -13,7 +13,6 @@ describe("students router", () => {
 
   const example_student = {
     id: 1,
-    professor_id: 1,
     name: "Bob",
     email: "bob@gmail.com",
   };
@@ -37,7 +36,12 @@ describe("students router", () => {
       .then(() => db("users").truncate());
     return db("users")
       .insert(example_professor)
-      .then(() => db("students").insert(example_student))
+      .then(() =>
+        db("students").insert({
+          ...example_student,
+          professor_id: example_professor.id,
+        })
+      )
       .then(() => db("projects").insert(example_project));
   });
 
@@ -72,7 +76,12 @@ describe("students router", () => {
       expect(res.body.student).toEqual(example_student);
     });
 
-    it.todo("should return 404 on unknown students");
+    it("should return 404 on unknown students", async () => {
+      const res = await request(server)
+        .get(`/api/students/1337`)
+        .set("Authorization", token);
+      expect(res.status).toBe(404);
+    });
   });
 
   describe("GET /api/students/:id/projects", () => {
@@ -88,6 +97,29 @@ describe("students router", () => {
         .get(`/api/students/${example_student.id}/projects`)
         .set("Authorization", token);
       expect(res.body.projects).toEqual([example_project]);
+    });
+  });
+
+  describe("POST /api/students/:id/projects", () => {
+    const new_project = {
+      student_id: 1,
+      name: "new project",
+      description: "new project description",
+      due_date: "2020-04-20",
+      completed: 1,
+    };
+
+    it("should return new project", async () => {
+      const res = await request(server)
+        .post(`/api/students/${example_student.id}/projects`)
+        .send(new_project)
+        .set("Authorization", token);
+      expect(res.status).toBe(201);
+      expect(res.body.project.student_id).toBe(new_project.student_id);
+      expect(res.body.project.name).toBe(new_project.name);
+      expect(res.body.project.description).toBe(new_project.description);
+      expect(res.body.project.due_date).toBe(new_project.due_date);
+      expect(res.body.project.completed).toBe(new_project.completed);
     });
   });
 
@@ -182,8 +214,19 @@ describe("students router", () => {
   });
 
   describe("DELETE /api/students", () => {
-    it.todo("should return 200");
-    it.todo("should return deleted student");
-    it.todo("should return 404 on unknown students");
+    it("should return deleted student", async () => {
+      const res = await request(server)
+        .delete(`/api/students/${example_student.id}`)
+        .set("Authorization", token);
+      expect(res.status).toBe(200);
+      expect(res.body.student).toEqual(example_student);
+    });
+
+    it("should return 404 on unknown students", async () => {
+      const res = await request(server)
+        .delete(`/api/students/1337`)
+        .set("Authorization", token);
+      expect(res.status).toBe(404);
+    });
   });
 });

@@ -28,10 +28,8 @@ function addNewProject(newProject){
 function editProject(changes, id) {
     return db('projects')
         .where('id', id)
-        .update(changes)
-        .then(updated => {
-            updated > 0 ? findProject(id) : null
-        })
+        .update(changes, "id")
+        .then(updated => findProject(id))
 }
 
 //delete function
