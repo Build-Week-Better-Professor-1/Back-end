@@ -27,7 +27,7 @@ function addStudent(student){
 //add new project to student object
 function addProject(project, student_id){
     return db('projects')
-        .insert({...project, student_id})
+        .insert({...project, student_id}, "id")
         .then(([id]) => {
             return findProject(id);
         })
@@ -36,7 +36,7 @@ function addProject(project, student_id){
 //add new message to student object
 function addMessage(message, student_id) {
     return db('messages')
-        .insert({...message, student_id})
+        .insert({...message, student_id}, "id")
         .then(([id]) => {
             return findMessages(id);
         })
