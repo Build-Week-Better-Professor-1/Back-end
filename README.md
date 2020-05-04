@@ -164,14 +164,34 @@ Make a delete request to `/api/students/:id` and you will receive a response for
 
 ```
 
-### POST `/api/projects`
+### GET `/api/students/:id/projects`
+To access this endpoint, you must be logged in. Once you are logged in, you must set the `Authorization` header to the token.
+
+Make a get request to `/api/students` and you will receive a response formatted in the following way:
+
+```
+{
+    "message": "...",
+    "projects": [
+      {
+        "id": 2,
+        "student_id": 2,
+        "name": "eye study",
+        "description": "study the biology of the eye",
+        "due_date": "2021-01-23",
+        "completed": 0
+      }
+    ]
+}
+
+```
+### POST `/api/students/:id/projects`
 To access this endpoint, you must be logged in. Once you are logged in, you must set the `Authorization` header to the token.
 
 Make a post request to `/api/projects` with JSON in the following format:
 
 ```
 {
-	"student_id": "2",
 	"name": "robot neural net",
 	"description": "build robot neural net schematics",
 	"due_date": "2020-28-10",
